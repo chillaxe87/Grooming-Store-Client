@@ -1,0 +1,92 @@
+.appointments__add{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    background: rgba(100, 100, 100, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .appointments__add-body{
+        display: block;
+        width: 40%;
+        min-height: 30%;
+        border: 2px solid $myDarkGreen;
+        border-radius: 5px;
+        background: white;
+        padding: 1rem;
+        position: relative;
+        
+        h3{
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        div{
+          display: flex;
+          justify-content: space-around;
+        }
+
+        form{
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          row-gap: 1rem;
+
+          select{
+            width: 50%;
+            border: 2px solid $myDarkGreen;
+            height: 2rem;
+            text-align: center;
+            text-align-last: center;
+            cursor: pointer;
+          }
+          option{
+            text-align: center;
+          }
+
+          label{
+            text-align: center;
+            font-weight: 700;
+          }
+  
+        }
+    }
+
+    button {
+        border: none;
+        color: white;
+        // margin: 1rem;
+        border-radius: 5px;
+        background: $myDarkGreen;
+        padding: 0.5rem;
+    
+        &:hover {
+          background: $myLightGreen;
+          cursor: pointer;
+        }
+
+      }
+      .close__button{
+        min-width: 25px !important;
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin:1rem;
+        padding: 0.2rem 0.5rem !important;
+      }
+
+      .form__button{
+        min-width: 100px;
+        position: absolute;
+        bottom: 2rem;
+        left: calc(50% - 50px);
+
+        &:disabled {
+          background: #ccc;
+          cursor: not-allowed;
+        }
+      }
+}
