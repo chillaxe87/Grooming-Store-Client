@@ -1,29 +1,39 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { AppointmentsContext } from '../../context/AppointmentsContext';
 
 import AppointmentsTime from './AppointmentsTime'
-import { abortAppointment } from '../../actions/appointmentsAction';
+import { abortAppointment, editAppointment } from '../../actions/appointmentsAction';
+import AppointmentsTimeSelect from './AppointmentsTimeSelect';
 
 
 const AppointmentDetails = (props) => {
 
-    const { appointmentDispatch } = useContext(AppointmentsContext)
+    const { appointmentsDispatch } = useContext(AppointmentsContext)
 
     const onClickAbortAppointments = () => {
-        appointmentDispatch(abortAppointment(props.appointment.id))
+        appointmentsDispatch(abortAppointment(props.appointment.id))
         props.setAppointmentDetails(null)
+    }
+
+    const onClickEditAppointments = () => {
+        appointmentsDispatch(editAppointment(props.appointment))
     }
 
     return (
         <div className="appointments__details">
             <div className="appointments__details-body">
-                <button className="close__button" onClick={()=>props.setAppointmentDetails(null)}>x</button>
+                <button className="close__button" onClick={()=>props.setAppointmentDetails(null)}>x</button>              
                 <h3>Appointment Details</h3>
-                <h4>Scheduled by: {props.appointment.owner.name}</h4>
-                <h4><AppointmentsTime time={props.appointment.time}/></h4>
-                <h4>Scheduled at:</h4>
                 <div>
-                    <button>Edit</button>
+                    <h4>{props.appointment.owner.name}</h4>
+                </div>
+                <div> <AppointmentsTime time={props.appointment.time}/></div>
+                <form>
+                    <input type="date"/>
+                    <AppointmentsTimeSelect />
+                </form>
+                <div className="buttons">
+                    <button onClick={onClickEditAppointments}>Edit</button>
                     <button onClick={onClickAbortAppointments}>Abort</button>
                 </div>
             </div>

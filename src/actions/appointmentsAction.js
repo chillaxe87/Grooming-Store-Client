@@ -2,15 +2,15 @@ export const addAppointment = (appointment) => ({
     type: "ADD_APPOINTMENT",
     appointment
 })
-export const abortAppointment = (index) => ({
+export const abortAppointment = (id) => ({
     type: "ABORT_APPOINTMENT",
-    index
+    id
 })
-export const editApointment = (appointment) => ({
+export const editAppointment = (appointment) => ({
     type: "EDIT_APPOINTMENT",
     appointment
 })
-export const sortApointments = (appointments) => ({
-    type: "SORT_APPOINTMENT",
+export const initAppointments = (appointments) => ({
+    type: "INIT_APPOINTMENT",
     appointments
 })

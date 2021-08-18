@@ -1,0 +1,53 @@
+.login-form {
+    height: 100vh;
+    width: 100vw;
+    margin-top: 6vh;
+    border-radius: 10px;
+    padding: 2rem;
+    background-color: white;
+
+    .login-form__body{
+        width: 30vw;
+        margin: auto;
+
+        h3{
+            color: $myDarkGreen;
+            text-align: center;
+        }
+    }
+
+    form{
+        display: flex;
+        row-gap: 0.5rem;
+        flex-direction: column;
+
+        input{
+            border-radius: 5px;
+            padding: 0.2rem;
+            background-color: white;
+        }
+    }
+    button{
+        margin: auto;
+        width:  5rem;
+        border: none;
+        background-color: $myDarkGreen;
+        padding: 0.2rem;
+        border-radius: 5px;
+        color: white;
+
+        &:hover {
+            background: $myLightGreen;
+            cursor: pointer;
+        }
+        &:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    }
+}
+.invalid-message {
+    margin-left: 1%;
+    color: $myRed;
+    font-size: 0.75rem;
+  }

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 
 const AppointmentsTime = (props) => {
 
@@ -36,7 +36,6 @@ const AppointmentsTime = (props) => {
             default:
                 return "Dec "
         }
-        return null;
     }
 
     const dateToDisplay = monthToDispalay() + day + " at " + hour + ":" + minutes

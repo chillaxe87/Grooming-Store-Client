@@ -35,6 +35,14 @@
           grid-template-columns: 1fr 1fr;
           row-gap: 1rem;
 
+          input {
+            width: 50%;
+            border: 2px solid $myDarkGreen;
+            height: 2rem;
+            text-align: center;
+            text-align-last: center;
+            cursor: pointer;
+          }
           select{
             width: 50%;
             border: 2px solid $myDarkGreen;

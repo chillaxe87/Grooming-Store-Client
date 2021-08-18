@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useReducer, useState } from 'react';
 import Appointment from './Appointment';
 import AppointmentDetails from './AppintmentsDetails';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 import AppointmentAddForm from './AppointmentAddForm';
-import appointmentsReducer, { initialAppointmentsState, users } from '../../reducers/appointmentsReducer';
+import appointmentsReducer, { initialAppointmentsState } from '../../reducers/appointmentsReducer';
 import { AppointmentsContext } from '../../context/AppointmentsContext';
+// import { addAppointment, editAppointment } from '../../actions/appointmentsAction';
+// import { useHistory } from 'react-router-dom';
 
 
 const Appointments = () => {
 
+    // const history = useHistory();
     const [appointmentDetails, setAppointmentDetails] = useState(null);
     const [isDateSortDown, setIsDateSortDown] = useState(true);
     const [isUserSortDown, setIsUserSortDown] = useState(false);
@@ -16,30 +19,33 @@ const Appointments = () => {
    
 
 
-    const { appointmentsState } = useContext(AppointmentsContext)
+    const { appointmentsState } = useContext (AppointmentsContext)
     const [appointments, setAppointments] = useReducer(appointmentsReducer, initialAppointmentsState);
+    const [appointmentsToDisplay, setAppointmentsToDisplay] = useState(appointmentsState)
 
 
     useEffect (() => {
         if(isDateSortDown){
             onClickSortByDate()
         }
+        console.log("Main")
+        console.log(appointmentsToDisplay)
     },[]);
 
     const onClickSortByDate = () => {
-        const sortedAppointments = isDateSortDown? 
-            appointments.sort(function(a, b){return a.time.getTime() - b.time.getTime()}):
-            appointments.sort(function(a, b){return b.time.getTime() - a.time.getTime()});
+        isDateSortDown? 
+            setAppointments(appointments.sort(function(a, b){return a.time.getTime() - b.time.getTime()})):
+            setAppointments(appointments.sort(function(a, b){return b.time.getTime() - a.time.getTime()}));
         
-        setAppointments(sortedAppointments);
+        // setAppointments(sortedAppointments);
         setIsDateSortDown(!isDateSortDown)
     }
     const onClickSortByName = () => {
-        const sortedNames = isUserSortDown?
-            appointments.sort(function(a, b){ return a.owner.name.localeCompare(b.owner.name)} ):
-            appointments.sort(function(a, b){ return b.owner.name.localeCompare(a.owner.name)} );
+        isUserSortDown?
+            setAppointments(appointments.sort(function(a, b){ return a.owner.name.localeCompare(b.owner.name)})):
+            setAppointments(appointments.sort(function(a, b){ return b.owner.name.localeCompare(a.owner.name)}));
 
-        setAppointments(sortedNames);
+        // setAppointments(sortedNames);
         setIsUserSortDown(!isUserSortDown)
     }
     const onClickNewForm = () => {
@@ -71,6 +77,7 @@ const Appointments = () => {
                 {
                     isNewForm && <AppointmentAddForm 
                         onClickNewForm={onClickNewForm}
+                        setAppointments={setAppointments}
                     />
                 }             
             </div> 
