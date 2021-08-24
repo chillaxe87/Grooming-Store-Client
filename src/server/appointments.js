@@ -16,10 +16,15 @@ export const getAppointmentsFromDb = async () => {
 }
 
 export const postAppointmentInDb = async (appointment) => {
+ 
+    const newAppointment = JSON.parse(appointment)
+    console.log("Server Post: ")
+    console.log(newAppointment) 
+
     try {
         const res = await Axios.post(
             DB_URL,
-            { appointment},
+            newAppointment,
         );
         return res.data;
     } catch (err) {
@@ -27,10 +32,11 @@ export const postAppointmentInDb = async (appointment) => {
     }
 }
 
+
 export const getAppointmentInDb = async (Id) => {
     try {
         const res = await Axios.get(
-            DB_URL + Id,
+            DB_URL + "/" + Id,
         )
         if (!res.data) {
             throw new Error("appointment not found");
@@ -42,6 +48,23 @@ export const getAppointmentInDb = async (Id) => {
         throw err;
     }
 };
+
+export const deleteAppointmentFromDb = async (Id) => {
+    console.log(DB_URL + "/" + Id)
+    try{
+        const res = await Axios.delete(
+            DB_URL + "/" + Id
+        )
+        if(!res.data){
+            throw new Error("appointment not found");
+        }
+        return (
+            res.data
+        )
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 
 // export const getAppointmentsFromDb = async () => {

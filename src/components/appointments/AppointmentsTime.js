@@ -3,35 +3,35 @@ import React from 'react'
 const AppointmentsTime = (props) => {
 
     const time = props.time;
+    const day = time[8] + time[9]
+    const month = time[5] + time[6]
+    const hour = time[11] + time[12]
+    const minutes = time[14] + time[15]
 
-    const day = time.getDate();
-    const month = time.getMonth();
-    const hour = time.getHours();
-    const minutes = time.getMinutes();
 
     const monthToDispalay = () => {
         switch(month){
-            case 0:
+            case "01":
                 return "Jun "
-            case 1:
+            case "02":
                 return "Feb "
-            case 2:
+            case "03":
                 return "Mar "
-            case 3:
+            case "04":
                 return "Apr "
-            case 4:
+            case "05":
                 return "May "
-            case 5:
+            case "06":
                 return "Jun "
-            case 6:
+            case "07":
                 return "Jul "
-            case 7:
+            case "08":
                 return "Aug "
-            case 8:
+            case "09":
                 return "Sep "               
-            case 9:
+            case "10":
                 return "Oct "
-            case 10:
+            case "11":
                 return "Nov "
             default:
                 return "Dec "

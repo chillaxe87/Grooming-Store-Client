@@ -1,6 +1,6 @@
 import React , { createContext, useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
-import appointmentsReducer, { initialAppointmentsState } from '../reducers/appointmentsReducer';
+import appointmentsReducer from '../reducers/appointmentsReducer';
 import {initAppointments} from '../actions/appointmentsAction';
 import { getAppointmentsFromDb } from '../server/appointments';
  
@@ -8,7 +8,7 @@ export const AppointmentsContext = createContext();
 
 const AppointmentsContextProvider = (props) => {
 
-    const [appointmentsState, appointmentsDispatch] = useReducer(appointmentsReducer, initialAppointmentsState)
+    const [appointmentsState, appointmentsDispatch] = useReducer(appointmentsReducer, "")
     const history = useHistory();
 
     useEffect(() => {

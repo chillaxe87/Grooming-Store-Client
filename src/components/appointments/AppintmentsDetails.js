@@ -4,18 +4,23 @@ import { AppointmentsContext } from '../../context/AppointmentsContext';
 import AppointmentsTime from './AppointmentsTime'
 import { abortAppointment, editAppointment } from '../../actions/appointmentsAction';
 import AppointmentsTimeSelect from './AppointmentsTimeSelect';
-
+import {deleteAppointmentFromDb, getAppointmentInDb} from '../../server/appointments'
+import { useHistory } from 'react-router-dom';
 
 const AppointmentDetails = (props) => {
-
+ 
+    const history = useHistory()
     const { appointmentsDispatch } = useContext(AppointmentsContext)
 
-    const onClickAbortAppointments = () => {
-        appointmentsDispatch(abortAppointment(props.appointment.id))
+    const onClickAbortAppointments = async () => {
+        await deleteAppointmentFromDb(props.appointment.id);
+        history.push("/")
         props.setAppointmentDetails(null)
     }
 
     const onClickEditAppointments = () => {
+        console.log("Edit")
+        console.log(props.appointment)
         appointmentsDispatch(editAppointment(props.appointment))
     }
 
@@ -25,9 +30,9 @@ const AppointmentDetails = (props) => {
                 <button className="close__button" onClick={()=>props.setAppointmentDetails(null)}>x</button>              
                 <h3>Appointment Details</h3>
                 <div>
-                    <h4>{props.appointment.owner.name}</h4>
+                    <h4>{props.appointment.userName}</h4>
                 </div>
-                <div> <AppointmentsTime time={props.appointment.time}/></div>
+                <div> <AppointmentsTime time={props.appointment.scheduledFor}/></div>
                 <form>
                     <input type="date"/>
                     <AppointmentsTimeSelect />

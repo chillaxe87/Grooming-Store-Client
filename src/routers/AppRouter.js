@@ -9,10 +9,12 @@ import PageNotFound from '../components/main/PageNotFound';
 import AppointmentsLoader from '../components/appointments/AppointmentsLoader';
 import LoginFrom from '../components/login/LoginForm';
 import SubscribeFrom from '../components/login/SubscribeForm';
+import LoginContextProvider from '../context/LoginContext';
 
 
 const AppRouter = () => (
     <BrowserRouter>
+        <LoginContextProvider>
             <Header />
             <Switch>
                 <Route path="/" exact>
@@ -25,6 +27,7 @@ const AppRouter = () => (
                 <Route path="*" component= { PageNotFound } />
             </Switch>
             <Footer />
+        </LoginContextProvider>          
     </BrowserRouter>
 );
 

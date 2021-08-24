@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { LoginContext } from "../../context/LoginContext";
+import { saveUserOnCookie } from "../../cookies/cookies";
+import { loginToSite } from "../../server/auth";
+import { loginAction } from "../../actions/loginAction";
 
 const LoginFrom = (props) => {
+
+	const { userData, dispatchUserData } = useContext(LoginContext);
 
 	const history = useHistory();
 
@@ -10,6 +16,11 @@ const LoginFrom = (props) => {
 	const [isEmailInputValid, setIsEmailInputValid] = useState(true);
 	const [isPasswordInputValid, setIsPasswordInputValid] = useState(true);
 
+	useEffect (() => {
+		if(!!userData.user){
+			history.push('/')
+		}
+    },[]);
 
 	const isFormInValid = () => {
 		return email === "" || password === "";
@@ -39,7 +50,19 @@ const LoginFrom = (props) => {
 
 	const onSubmitForm = (event) => {
 		event.preventDefault();
-		history.push("/appointments")
+
+		loginToSite(email, password).then(
+			(userData) => {
+				console.log(userData)
+				dispatchUserData(loginAction(userData));
+				saveUserOnCookie(userData);
+				history.push('/')
+			}, (err) => {
+				setIsEmailInputValid(false);
+				setIsPasswordInputValid(true);
+				console.log(err)
+			}
+		) 
 	}
 
 	return (

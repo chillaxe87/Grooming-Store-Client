@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { loginAction } from "../../actions/loginAction";
+import { LoginContext } from '../../context/LoginContext';
+import { saveUserOnCookie } from '../../cookies/cookies';
+import { registerToSite } from '../../server/auth';
 
 const SubscribeFrom = (props) => {
 
-    const history = useHistory();
+	const { userData, dispatchUserData } = useContext(LoginContext);
 
+    const history = useHistory();
     const [email, setEmail] = useState("")
-    const [name, setName] = useState("")
+    const [userName, setUserName] = useState("")
 	const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
-
-
 
     const [isEmailInputValid, setIsEmailInputValid] = useState(true);
     const [isNameInputValid, setIsNameInputValid] = useState(true)
@@ -18,8 +21,14 @@ const SubscribeFrom = (props) => {
     const [isRepeatPasswordInputValid, setIsRepeatPasswordInputValid] = useState(true);
 
     const isFormInValid = () => {
-		return email === "" || password === "" || name === "" || !isRepeatPasswordInputValid;
+		return email === "" || password === "" || userName === "" || !isRepeatPasswordInputValid;
 	}
+
+		useEffect (() => {
+		if(!!userData.user){
+			history.push('/')
+		}
+    },[]);
 
     const onBlurEmailInput = (event) => {
 		const typedEmail = event.target.value.trim();
@@ -35,10 +44,10 @@ const SubscribeFrom = (props) => {
     const onBlurNameInput = (event) => {
 		const typedName = event.target.value.trim();
 		if(typedName === ""){
-			setName("")
+			setUserName("")
 			setIsNameInputValid(false);
 		} else {
-			setName(typedName);
+			setUserName(typedName);
 			setIsNameInputValid(true);
 		}
 	}
@@ -67,7 +76,21 @@ const SubscribeFrom = (props) => {
 
     const onSubmitForm = (event) => {
         event.preventDefault();
-        history.push("/appointments");
+ 
+		registerToSite(email, userName, password).then(
+			(userData) => {
+				console.log(userData);
+				dispatchUserData(loginAction(userData))
+				saveUserOnCookie(userData)
+				history.push("/");
+			}, (err) => {
+				setEmail("")
+				setPassword("")
+				setUserName("")
+				setRepeatPassword("")
+				console.log(err)
+			}
+		)
     }
 	return (       
 		<div className="login-form">
