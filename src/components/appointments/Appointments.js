@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Appointment from './Appointment';
 import AppointmentDetails from './AppintmentsDetails';
 import AppointmentAddForm from './AppointmentAddForm';
 import { AppointmentsContext } from '../../context/AppointmentsContext';
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from '../../context/LoginContext';
+import { getAppointmentsFromDb } from '../../server/appointments';
 
 const Appointments = () => {
   
@@ -18,25 +19,19 @@ const Appointments = () => {
     const [appointments, setAppointments] = useState([]);
     const [idZero, setIdZero] = useState("0");
 
-    const { userData, dispatchUserData } = useContext(LoginContext);
+    const { userData } = useContext(LoginContext);
 
     useEffect (() => {
         if(isDateSortDown){
             onClickSortByDate()
         }
         setAppointments(appointmentsState)
-        console.log("Main")
-        if(!!appointmentsState){
-            console.log(appointmentsState)
-        }
+        return (() => setAppointments([]))
     },[appointmentsState.length, history, isNewForm, appointmentDetails]);
 
+
     const onClickSortByDate = () => {
-        isDateSortDown? 
-            setAppointments(appointments.sort(function(a, b){return Date(a).scheduledFor.getTime() - Date(b).scheduledFor.getTime()})):
-            setAppointments(appointments.sort(function(a, b){return Date(b).scheduledFor.getTime() - Date(a).scheduledFor.getTime()}));
-        
-        // setAppointments(sortedAppointments);
+        appointments.reverse();
         setIsDateSortDown(!isDateSortDown)
     }
     const onClickSortByName = () => {
@@ -48,9 +43,27 @@ const Appointments = () => {
         setIsUserSortDown(!isUserSortDown)
     }
     const onClickNewForm = () => {
-        setIsNewForm(!isNewForm);
+        if(!!userData.user){
+            setIsNewForm(!isNewForm);
+        } else {
+            history.push('/login')
+        }
+
     }
 
+    const onClickNextPage = () => {
+        const params = new URLSearchParams(window.location.search)
+        const page = params.has("page") ? parseInt(params.get("page")) + 1 : 2
+        history.push('/Appointments?page=' + page)
+        window.location.reload(false);
+    }
+    const onClickBackPage = () => {
+        const params = new URLSearchParams(window.location.search)
+        const page = params.has("page") ? parseInt(params.get("page")) -1 : 1
+        history.push('/Appointments?page=' + (page < 1 ? 1 : page))
+        window.location.reload(false);
+
+    }
     return (
         <div className="appointment-container">                     
             <div className="appointment">
@@ -58,7 +71,7 @@ const Appointments = () => {
                 <div className="appointment-func">
                     <div onClick={onClickSortByName}>Name <i className={isUserSortDown ? "arrow up" : "arrow down" }></i></div>
                     <div onClick={onClickSortByDate}>Date <i className ={isDateSortDown ? "arrow up" : "arrow down" }></i></div>
-                    { userData.user && <div className="add-appointment" onClick={onClickNewForm}>Add</div>}
+                    <div className="add-appointment" onClick={onClickNewForm}>Add</div>
                 </div>
                 {appointments.length !== 0 && appointments.map((appointment) => (
                     <Appointment 
@@ -79,7 +92,10 @@ const Appointments = () => {
                         setAppointments={setAppointments}
                         idZero={idZero}
                     />
-                }             
+                }      
+                <div className="nav__button">
+                    <button onClick={onClickBackPage}>back</button> <button onClick={onClickNextPage} disabled = {appointments.length < 18}>next</button>
+                </div>       
             </div> 
         </div>
     );

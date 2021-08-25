@@ -14,13 +14,11 @@ const AppointmentsContextProvider = (props) => {
     useEffect(() => {
 
         let isComponentExist = true;
-
+        console.log("data updated")
         getAppointmentsFromDb().then(
             (appointmentsData) => {
                 if (isComponentExist) {
                     appointmentsDispatch(initAppointments(appointmentsData));
-                    console.log("context:")
-                    console.log(appointmentsState)
                 }
             },
             (err) => {

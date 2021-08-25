@@ -2,7 +2,7 @@ import React, { useContext , useEffect, useState} from "react";
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from "../../context/LoginContext";
 import { logoutAction } from "../../actions/loginAction";
-import { deleteUserFromCookie, getUserFromCookie } from "../../cookies/cookies";
+import { deleteUserFromCookie } from "../../cookies/cookies";
 
 const Header = () => {
 
@@ -12,13 +12,12 @@ const Header = () => {
 	const history = useHistory();
 
 	useEffect (() => {
-		console.log("logged in")
 		if(userData.user != null){
 			setNameToDisplay(userData.user.userName)
 		} else {
 			setNameToDisplay("")
 		}
-	},[userData.user])
+	},[userData.user, history, nameToDisplay])
 
 	const onClickShowLoginForm = (event) => {
 		history.push("/login")
@@ -29,12 +28,13 @@ const Header = () => {
 	}
 
 	const onClickAppintments = () => {
-		history.push("/Appointments")
+		history.push("/Appointments?page=1")
+		window.location.reload(false)
 	}
 	const onClickLogout = () => {
 		dispatchUserData(logoutAction());
 		deleteUserFromCookie();
-		history.push("/");
+		history.push("/Appointments");
 	};
     return (
         <div className="header">

@@ -1,27 +1,30 @@
-import React, { useContext } from 'react';
-import { AppointmentsContext } from '../../context/AppointmentsContext';
+import React, {useContext, useState} from 'react';
 
 import AppointmentsTime from './AppointmentsTime'
-import { abortAppointment, editAppointment } from '../../actions/appointmentsAction';
 import AppointmentsTimeSelect from './AppointmentsTimeSelect';
-import {deleteAppointmentFromDb, getAppointmentInDb} from '../../server/appointments'
+import {deleteAppointmentFromDb} from '../../server/appointments'
 import { useHistory } from 'react-router-dom';
+import { LoginContext } from '../../context/LoginContext';
+import AppointmentAddForm from './AppointmentAddForm';
+
 
 const AppointmentDetails = (props) => {
  
+    const { userData } = useContext(LoginContext);
+    const [isEditMode, setIsEditMode] = useState(false)
     const history = useHistory()
-    const { appointmentsDispatch } = useContext(AppointmentsContext)
 
     const onClickAbortAppointments = async () => {
-        await deleteAppointmentFromDb(props.appointment.id);
+        await deleteAppointmentFromDb(props.appointment.id, userData.token);
         history.push("/")
         props.setAppointmentDetails(null)
     }
 
     const onClickEditAppointments = () => {
-        console.log("Edit")
-        console.log(props.appointment)
-        appointmentsDispatch(editAppointment(props.appointment))
+        setIsEditMode(true)
+    }
+    const onClickSaveChanges = () => {
+
     }
 
     return (
@@ -29,18 +32,20 @@ const AppointmentDetails = (props) => {
             <div className="appointments__details-body">
                 <button className="close__button" onClick={()=>props.setAppointmentDetails(null)}>x</button>              
                 <h3>Appointment Details</h3>
-                <div>
-                    <h4>{props.appointment.userName}</h4>
-                </div>
-                <div> <AppointmentsTime time={props.appointment.scheduledFor}/></div>
-                <form>
-                    <input type="date"/>
-                    <AppointmentsTimeSelect />
-                </form>
+                <h4>{props.appointment.userName}</h4>
+                <div> <b>Scheduled For: </b> <AppointmentsTime time={props.appointment.scheduledFor}/></div>
+                <div> <b>Scheduled At : </b> <AppointmentsTime time={props.appointment.scheduledAt}/></div>
+                {isEditMode && 
+                    <form>
+                        <input type="date"/>
+                        <AppointmentsTimeSelect />
+                    </form>}
                 <div className="buttons">
-                    <button onClick={onClickEditAppointments}>Edit</button>
-                    <button onClick={onClickAbortAppointments}>Abort</button>
+                    {!isEditMode && <button onClick={onClickEditAppointments}>Edit</button>}
+                    {isEditMode && <button onClick={onClickSaveChanges}>Save</button>}
+                    <button onClick={onClickAbortAppointments}>Delete</button>
                 </div>
+                {isEditMode && <AppointmentAddForm  idZero={props.appointment.id}/>}
             </div>
         </div>
     );

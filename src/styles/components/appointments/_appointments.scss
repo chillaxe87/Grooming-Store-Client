@@ -66,3 +66,27 @@
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
+.nav__button{
+  position: absolute;
+  bottom: 6rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+
+  button{
+    cursor: pointer;
+    font-size: 1rem;
+    background: $myDarkGreen;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+
+    &:hover {
+      background: $myLightGreen;
+      cursor: pointer;
+    }
+    &:disabled{
+      cursor: not-allowed
+    }
+  }
+}

@@ -1,10 +1,10 @@
 import Cookies from 'js-cookie';
 
-const USER_DATA = "user-data";
+const USER_DATA = process.env.REACT_APP_MY_SECRET
 
 export const saveUserOnCookie = (userData) => {
     const jsonUserData = JSON.stringify(userData);
-    Cookies.set(USER_DATA, jsonUserData, { expires: 1 / 24, sameSite: "strict", secure: true });
+    Cookies.set(USER_DATA, jsonUserData, { expires: 12 / 24, sameSite: "strict", secure: true });
 };
 
 export const deleteUserFromCookie = () => {

@@ -27,7 +27,7 @@ const LoginFrom = (props) => {
 	}
 
 	const onBlurEmailInput = (event) => {
-		const typedEmail = event.target.value.trim();
+		const typedEmail = event.target.value.trim().toLowerCase();
 		if(typedEmail === ""){
 			setEmail("")
 			setIsEmailInputValid(false);
@@ -50,10 +50,10 @@ const LoginFrom = (props) => {
 
 	const onSubmitForm = (event) => {
 		event.preventDefault();
+		console.log("login: ", email, password)
 
 		loginToSite(email, password).then(
 			(userData) => {
-				console.log(userData)
 				dispatchUserData(loginAction(userData));
 				saveUserOnCookie(userData);
 				history.push('/')

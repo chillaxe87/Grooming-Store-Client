@@ -3,11 +3,11 @@ import Axios from 'axios'
 const DB_URL = process.env.REACT_APP_APPOINTMENTS_DB;
 
 export const getAppointmentsFromDb = async () => {
+    const params = new URLSearchParams(window.location.search)
+    let page = params.has("page") ? params.get("page") : 1
     try{
-        const res = await Axios.get(DB_URL);   
+        const res = await Axios.get(DB_URL + "?page=" + page);   
         const appointments = res.data;    
-        console.log("Server")  
-        console.log(appointments) 
         return appointments;
     }catch (err){
         console.log("error fetching appointments")
@@ -15,17 +15,43 @@ export const getAppointmentsFromDb = async () => {
     }
 }
 
-export const postAppointmentInDb = async (appointment) => {
+export const postAppointmentInDb = async (appointment, token ) => {
  
+    const authAxios = Axios.create({
+        baseURL: DB_URL,
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     const newAppointment = JSON.parse(appointment)
-    console.log("Server Post: ")
-    console.log(newAppointment) 
-
     try {
-        const res = await Axios.post(
+        const res = await authAxios.post(
             DB_URL,
             newAppointment,
         );
+
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export const putAppointmentInDb = async (appointment, token) => {
+    const newAppointment = JSON.parse(appointment)
+    const authAxios = Axios.create({
+        baseURL: DB_URL,
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+ 
+
+    try {
+        const res = await authAxios.put(
+            DB_URL+"/" + newAppointment.id,
+            newAppointment
+        );
+
         return res.data;
     } catch (err) {
         console.log(err);
@@ -49,11 +75,16 @@ export const getAppointmentInDb = async (Id) => {
     }
 };
 
-export const deleteAppointmentFromDb = async (Id) => {
-    console.log(DB_URL + "/" + Id)
+export const deleteAppointmentFromDb = async (Id, token) => {
+    const authAxios = Axios.create({
+        baseURL: DB_URL,
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     try{
-        const res = await Axios.delete(
-            DB_URL + "/" + Id
+        const res = await authAxios.delete(
+            DB_URL + "/" + Id,
         )
         if(!res.data){
             throw new Error("appointment not found");

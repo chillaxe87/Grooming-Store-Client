@@ -1,8 +1,6 @@
 import React, { useState, useContext } from 'react'
-import { addAppointment, editAppointment } from '../../actions/appointmentsAction';
-import { nanoid } from "nanoid";
 import AppointmentsTimeSelect from './AppointmentsTimeSelect';
-import {postAppointmentInDb} from '../../server/appointments';
+import {postAppointmentInDb, putAppointmentInDb} from '../../server/appointments';
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from '../../context/LoginContext';
 
@@ -10,58 +8,74 @@ import { LoginContext } from '../../context/LoginContext';
 
 const AppointmentAddForm = (props) => {
 
-    const { userData, dispatchUserData } = useContext(LoginContext);
+    const { userData } = useContext(LoginContext);
     const history = useHistory();
-    const [year, setYear] = useState("");
-    const [month, setMonth] = useState("");
-    const [day, setDay] = useState("");
-    const [hour, setHour] = useState("");
-    const [minutes, setMinutes] = useState("");
-    const [isformValid, setIsFormValid] = useState(true)
+    const [date, setDate] = useState(["", "", ""]);
+    const [time, setTime] = useState(["", ""]);
+    const [isformValid, setIsFormValid] = useState(true);
+    const [isDateTakenMessage, setIsDateTakenMessage] = useState("");
 
     const [dateAndTime, setDateAndTime] = useState(null)
 
     const onClickAddNewSchedule = async (event) => {
+
         event.preventDefault();
-        const csTime = new Date(year, month, day, hour, minutes)
+        setIsFormValid(true);
+        const csTime = new Date(date[0], date[1], date[2], time[0], time[1])
         let currentTime = new Date()
-        console.log(csTime)
-         
-        let appointment = {
-            id: 0,
-            userName: userData.user.userName,
-            userId: userData.user.id,
-            scheduledFor: csTime,
-            scheduledAt: currentTime,
-        }
-        await postAppointmentInDb(JSON.stringify(appointment))
-        history.push('/')
-        props.onClickNewForm();
+
+        if(props.idZero === "0"){      
+            let appointment = {
+                id: 0,
+                userName: userData.user.userName,
+                userId: userData.user.id,
+                scheduledFor: csTime,
+                scheduledAt: currentTime,
+            }
+            const res = await postAppointmentInDb(JSON.stringify(appointment), userData.token)
+            console.log(res)
+            if(!res.status == 201){
+                setIsDateTakenMessage(res)
+            } else {
+                history.push('/')
+                props.onClickNewForm();
+            }
+        } else{
+            let appointment = {
+                id: props.idZero,
+                userName: userData.user.userName,
+                userId: userData.user.id,
+                scheduledFor: csTime,
+                scheduledAt: currentTime,
+            }
+            const res = await putAppointmentInDb(JSON.stringify(appointment), userData.token)
+            console.log(res)
+            if(!res.status == 200){
+                setIsDateTakenMessage(res)
+            } else {
+                alert("updated")
+                history.push('/')
+            }
+        }      
     }
 
     const onChangeDate = (event) => {
         event.preventDefault();
         const newDate = event.target.value.split('-');
 
-        setYear(newDate[0]);
-        setMonth(newDate[1]);
-        setDay(newDate[2]);
+        setDate([newDate[0], newDate[1] - 1,newDate[2]])
 
-        let date = new Date(newDate[0], newDate[1] - 1, newDate[2], hour, minutes)
+        let date = new Date(newDate[0], newDate[1], newDate[2], time[0], time[1])
         setDateAndTime(date)
-
         isFormValid()
     }
+
     const onChangeTime = (event) => {
         event.preventDefault();
         const newTime = event.target.value.split(':');
-        setHour(newTime[0])
-        setMinutes(newTime[1])
-
-        setDateAndTime(new Date(year, month, day, hour, minutes))
-
+        setTime([newTime[0], newTime[1]])
+        setDateAndTime(new Date(date[0], date[1], date[2], time[0], time[1]))
         isFormValid()
-
     }
 
     const isFormValid = () => {
@@ -89,6 +103,7 @@ const AppointmentAddForm = (props) => {
                     <AppointmentsTimeSelect onChangeTime={onChangeTime} />
                     <button type="submit" className="form__button" disabled={isformValid}>{props.idZero === "0" ? "Schedule" : "Edit"}</button>
                 </form>
+                <div className="invalid-message"> {isDateTakenMessage}</div>
             </div>
         </div>
     )
