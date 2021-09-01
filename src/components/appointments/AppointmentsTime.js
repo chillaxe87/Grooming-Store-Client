@@ -12,33 +12,33 @@ const AppointmentsTime = (props) => {
     const monthToDispalay = () => {
         switch(month){
             case "01":
-                return "Jun "
+                return " Jun "
             case "02":
-                return "Feb "
+                return " Feb "
             case "03":
-                return "Mar "
+                return " Mar "
             case "04":
-                return "Apr "
+                return " Apr "
             case "05":
-                return "May "
+                return " May "
             case "06":
-                return "Jun "
+                return " Jun "
             case "07":
-                return "Jul "
+                return " Jul "
             case "08":
-                return "Aug "
+                return " Aug "
             case "09":
-                return "Sep "               
+                return " Sep "               
             case "10":
-                return "Oct "
+                return " Oct "
             case "11":
-                return "Nov "
+                return " Nov "
             default:
-                return "Dec "
+                return " Dec "
         }
     }
 
-    const dateToDisplay = monthToDispalay() + day + " at " + hour + ":" + minutes
+    const dateToDisplay =  day + monthToDispalay() + " at " + hour + ":" + minutes
 
     return (
         <span>{dateToDisplay}</span>

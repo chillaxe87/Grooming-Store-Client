@@ -1,4 +1,4 @@
-import React, { useContext , useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from "../../context/LoginContext";
 import { logoutAction } from "../../actions/loginAction";
@@ -7,17 +7,17 @@ import { deleteUserFromCookie } from "../../cookies/cookies";
 const Header = () => {
 
 	const { userData, dispatchUserData } = useContext(LoginContext);
-	const [nameToDisplay, setNameToDisplay]  = useState("")
-	
+	const [nameToDisplay, setNameToDisplay] = useState("")
+
 	const history = useHistory();
 
-	useEffect (() => {
-		if(userData.user != null){
+	useEffect(() => {
+		if (userData.user != null) {
 			setNameToDisplay(userData.user.userName)
 		} else {
 			setNameToDisplay("")
 		}
-	},[userData.user, history, nameToDisplay])
+	}, [userData.user, history, nameToDisplay])
 
 	const onClickShowLoginForm = (event) => {
 		history.push("/login")
@@ -29,31 +29,30 @@ const Header = () => {
 
 	const onClickAppintments = () => {
 		history.push("/Appointments?page=1")
-		window.location.reload(false)
 	}
 	const onClickLogout = () => {
 		dispatchUserData(logoutAction());
 		deleteUserFromCookie();
-		history.push("/Appointments");
+		history.push("/Appointments?page=1");
 	};
-    return (
-        <div className="header">
-			<div className="header__nav">		
+	return (
+		<div className="header">
+			<div className="header__nav">
 				<div onClick={onClickAppintments}>Appointments</div>
 				{
 					!userData.user ?
-					<div className="header__nav-login">	
-                        <div onClick={onClickShowLoginForm}>Login</div>
-                 	    <div onClick={onClickShowSubscribeForm}>Subscribe</div>  						
-				    </div> :
-				    <div className="header__nav-login">	
-				        <div className="userName">{nameToDisplay}</div>
-                        <div onClick={onClickLogout}>Logout</div>					
-			    	</div>
+						<div className="header__nav-login">
+							<div onClick={onClickShowLoginForm}>Login</div>
+							<div onClick={onClickShowSubscribeForm}>Subscribe</div>
+						</div> :
+						<div className="header__nav-login">
+							<div className="userName">{nameToDisplay}</div>
+							<div onClick={onClickLogout}>Logout</div>
+						</div>
 				}
 			</div>
 		</div>
-    )
+	)
 }
 
 export default Header

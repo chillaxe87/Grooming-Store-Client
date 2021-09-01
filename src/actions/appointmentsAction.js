@@ -2,8 +2,8 @@ export const addAppointment = (appointment) => ({
     type: "ADD_APPOINTMENT",
     appointment
 })
-export const abortAppointment = (id) => ({
-    type: "ABORT_APPOINTMENT",
+export const deleteAppointment = (id) => ({
+    type: "DELETE_APPOINTMENT",
     id
 })
 export const editAppointment = (appointment) => ({

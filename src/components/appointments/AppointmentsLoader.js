@@ -4,7 +4,8 @@ import Appointments from "./Appointments";
 const AppointmentsLoader = (props) => {
 
     const appointments = props.match
-    return(
+
+    return (
         <AppointmentsContextProvider>
             <Appointments appointments={appointments} />
         </AppointmentsContextProvider>

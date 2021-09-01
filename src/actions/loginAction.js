@@ -1,6 +1,7 @@
-export const loginAction = (response) => ({
+export const loginAction = ({token, user}) => ({
     type: "LOGIN",
-    response
+    token,
+    user
 });
 
 export const logoutAction = () => ({

@@ -1,28 +1,28 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AppointmentsTime from './AppointmentsTime';
 import { LoginContext } from '../../context/LoginContext';
 
 
-const Appointment = (props) => {
+const Appointment = ({ appointment, setAppointmentDetails }) => {
 
     const { userData } = useContext(LoginContext);
-    const [isYourAppointment, setisYourAppointment] = useState("")
+    const [isYourAppointment, setisYourAppointment] = useState(false)
+    const name = appointment.userName;
 
-    useEffect (() => {
-        if(!userData.user){
-            setisYourAppointment(false)
-        } else{
-            setisYourAppointment(userData.user.id === props.appointment.userId)
+    useEffect(() => {
+        if (!!userData.user) {
+            setisYourAppointment(userData.user.id === appointment.userId)
         }
-        return (()=>setisYourAppointment(""))
-    },[userData.user])
-    const name = props.appointment.userName;
+
+        return (() => setisYourAppointment(false))
+    }, [userData.user, appointment.userId])
+
 
     return (
         <div className="appointment__container">
             <div>{name} </div>
-            <AppointmentsTime time={props.appointment.scheduledFor}/>
-            {isYourAppointment && <button onClick={()=>props.setAppointmentDetails(props.appointment)}>Details</button> }
+            <AppointmentsTime time={appointment.scheduledFor} />
+            {isYourAppointment && <button onClick={() => setAppointmentDetails(appointment)}>Details</button>}
         </div>
     );
 }
