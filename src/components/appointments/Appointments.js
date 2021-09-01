@@ -81,7 +81,7 @@ const Appointments = (props) => {
         setIsUserSortDown(!isUserSortDown)
     }
     const onClickNewForm = () => {
-        if (!!userData.user) {
+        if (userData.userName !== "") {
             setIsNewForm(!isNewForm);
         } else {
             history.push('/login')

@@ -8,9 +8,11 @@ const LoginContextProvider = (props) => {
     const cookieUserData = getUserFromCookie();
     const [userData, dispatchUserData] = useReducer(loginReducer, cookieUserData || userDataInitialState);
 
+    console.log(userData)
+
     return (
-        <LoginContext.Provider value={ { userData, dispatchUserData } }>
-            {props.children }
+        <LoginContext.Provider value={{ userData, dispatchUserData }}>
+            {props.children}
         </LoginContext.Provider>
     );
 };

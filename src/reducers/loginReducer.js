@@ -1,14 +1,19 @@
-export const userDataInitialState = { user: null, token: "" };
+export const userDataInitialState = { id: "", userName: "", token: "" };
 
-const loginReducer = (userData, { type, user, token }) => {
+const loginReducer = (userData, { type, id, userName, token }) => {
     switch (type) {
         case "LOGIN":
             return {
-                user: { userName: user.userName, userId: user.id },
+                userName: userName,
+                userId: id,
                 token: token
             };
         case "LOGOUT":
-            return { user: null, token: "" };
+            return {
+                userId: "",
+                userName: "",
+                token: ""
+            };
         default:
             return { ...userData };
     }

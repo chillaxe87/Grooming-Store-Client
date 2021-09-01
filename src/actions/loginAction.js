@@ -1,7 +1,8 @@
-export const loginAction = ({token, user}) => ({
+export const loginAction = ({ id, userName, token }) => ({
     type: "LOGIN",
-    token,
-    user
+    id,
+    userName,
+    token
 });
 
 export const logoutAction = () => ({

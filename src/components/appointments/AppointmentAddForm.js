@@ -26,8 +26,8 @@ const AppointmentAddForm = (props) => {
         if (props.idZero === "0") {
             let appointment = {
                 id: 0,
-                userName: userData.user.userName,
-                userId: userData.user.id,
+                userName: userData.userName,
+                userId: userData.id,
                 scheduledFor: csTime,
                 scheduledAt: currentTime,
             }
@@ -41,8 +41,8 @@ const AppointmentAddForm = (props) => {
         } else {
             let appointment = {
                 id: props.idZero,
-                userName: userData.user.userName,
-                userId: userData.user.id,
+                userName: userData.userName,
+                userId: userData.id,
                 scheduledFor: csTime,
                 scheduledAt: currentTime,
             }

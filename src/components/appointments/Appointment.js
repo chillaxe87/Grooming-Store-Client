@@ -10,12 +10,12 @@ const Appointment = ({ appointment, setAppointmentDetails }) => {
     const name = appointment.userName;
 
     useEffect(() => {
-        if (!!userData.user) {
-            setisYourAppointment(userData.user.id === appointment.userId)
+        if (userData.userName !== "") {
+            setisYourAppointment(userData.id === appointment.userId)
         }
 
         return (() => setisYourAppointment(false))
-    }, [userData.user, appointment.userId])
+    }, [userData.id, appointment.userId, userData.userName])
 
 
     return (

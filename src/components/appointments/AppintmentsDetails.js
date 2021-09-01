@@ -14,7 +14,8 @@ const AppointmentDetails = (props) => {
     const [isEditMode, setIsEditMode] = useState(false)
     const history = useHistory()
 
-    const onClickAbortAppointments = async () => {
+    const onClickAbortAppointments = async (event) => {
+        event.preventDefault()
         await deleteAppointmentFromDb(props.appointment.id, userData.token).then((res) => {
             console.log(res)
         }, (err) => {

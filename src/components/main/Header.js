@@ -12,12 +12,12 @@ const Header = () => {
 	const history = useHistory();
 
 	useEffect(() => {
-		if (userData.user != null) {
-			setNameToDisplay(userData.user.userName)
+		if (userData.userName !== "") {
+			setNameToDisplay(userData.userName)
 		} else {
 			setNameToDisplay("")
 		}
-	}, [userData.user, history, nameToDisplay])
+	}, [userData.userName, history, nameToDisplay])
 
 	const onClickShowLoginForm = (event) => {
 		history.push("/login")
@@ -40,7 +40,7 @@ const Header = () => {
 			<div className="header__nav">
 				<div onClick={onClickAppintments}>Appointments</div>
 				{
-					!userData.user ?
+					userData.userName === "" ?
 						<div className="header__nav-login">
 							<div onClick={onClickShowLoginForm}>Login</div>
 							<div onClick={onClickShowSubscribeForm}>Subscribe</div>
